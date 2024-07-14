@@ -1,0 +1,25 @@
+event_management.settings:
+  path: 'admin/config/event_management/settings'
+  defaults:
+    _form: '\Drupal\event_management\Form\EventManagementSettingsForm'
+    _title: 'Event Management Settings'
+  requirements:
+    _permission: 'administer site configuration'
+
+
+event_management.list:
+  path: '/events'
+  defaults:
+    _controller: '\Drupal\event_management\Controller\EventController::list'
+    _title: 'Events'
+  requirements:
+    _permission: 'access content'
+
+
+event_management.view:
+  path: '/events/{event}'
+  defaults:
+    _controller: '\Drupal\event_management\Controller\EventController::view'
+    _title_callback: '\Drupal\event_management\Controller\EventController::getTitle'
+  requirements:
+    _permission: 'access content'

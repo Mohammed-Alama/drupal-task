@@ -1,0 +1,22 @@
+<div style="padding:10px;
+             margin:10px;
+             display: flex;
+             align-items: center;
+             flex-direction:row;
+             justify-content: space-between;">
+  {% if event.image %}
+    <img class="mr-3" style="margin-right: 30px" width="100px" height="100px"
+         src="{{ file_url(event.image.entity.uri.value) }}"
+         alt="{{ event.image.alt }}">
+  {% endif %}
+  <p class="card-title mb-0">{{ event.category.entity.getName() }}</p>
+  <p class="card-title mb-0">{{ event.description.value|raw}}</p>
+  <div style="
+             display: flex;
+             align-items: center;
+             flex-direction:column;
+             justify-content: space-between;">
+    <p>Start: {{ event.start_date_time.value|date('F j, Y, g:i a') }}</p>
+    <p>End : {{ event.end_date_time.value|date('F j, Y, g:i a') }}</p>
+  </div>
+</div>

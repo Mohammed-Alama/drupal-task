@@ -1,0 +1,18 @@
+entity.event.collection:
+  title: 'Events'
+  description: 'List of events.'
+  route_name: entity.event.collection
+  parent: system.admin_content
+
+event_management.admin:
+  title: 'Event Management'
+  description: 'Event Management settings'
+  parent: system.admin_config
+  route_name: '<front>'
+  weight: 100
+
+event_management.settings:
+  title: 'Event Management Settings'
+  description: 'Configuration for Event Management'
+  route_name: event_management.settings
+  parent: event_management.admin

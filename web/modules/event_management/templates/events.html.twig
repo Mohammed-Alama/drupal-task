@@ -1,0 +1,35 @@
+<div class="row">
+  {% for event in events %}
+    <a href="{{ url('event_management.view', {'event': event.id()}) }}">
+      <div class="col-sm-4">
+        <div class="card">
+          <div class="card-body"
+               style="padding:10px;
+               margin:10px;
+               display: flex;
+               align-items: center;
+               flex-direction:row;
+               justify-content: space-between;
+               border: 1px solid #000;">
+            {% if event.image %}
+              <img class="mr-3" style="margin-right: 30px" width="100px" height="100px"
+                   src="{{ file_url(event.image.entity.uri.value) }}"
+                   alt="{{ event.image.alt }}">
+            {% endif %}
+            <h5 class="card-title mb-0">{{ event.title.getString() }}</h5>
+            <p class="card-title mb-0">{{ event.category.entity.getName() }}</p>
+            <div class="card-body"
+                 style="
+             display: flex;
+             align-items: center;
+             flex-direction:column;
+             justify-content: space-between;">
+              <p class="card-text">Start: {{ event.start_date_time.value|date('F j, Y, g:i a') }}</p>
+              <p> End : {{ event.end_date_time.value|date('F j, Y, g:i a') }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </a>
+  {% endfor %}
+</div>

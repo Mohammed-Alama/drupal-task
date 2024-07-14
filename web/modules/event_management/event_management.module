@@ -1,0 +1,22 @@
+<?php
+
+/**
+ * @file
+ * Primary module hooks for Event Management module.
+ */
+
+/**
+ * Implements hook_theme().
+ */
+function event_management_theme(): array
+{
+  return [
+    'event' => [
+      'variables' => ['event' => NULL],
+    ],
+    'events' => [
+      'variables' => ['events' => []],
+    ],
+  ];
+}
+

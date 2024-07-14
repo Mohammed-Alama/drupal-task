@@ -1,0 +1,8 @@
+/vendor/
+sites/*/settings*.php
+sites/*/services*.yml
+web/sites/*/files
+.ddev/*
+!.ddev/config.yaml
+.idea/
+/web/core/*

@@ -1,0 +1,128 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for the Event Management module.
+ */
+
+use Drupal\taxonomy\Entity\Term;
+use Drupal\taxonomy\Entity\Vocabulary;
+
+/**
+ * Implements hook_install().
+ *
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function event_management_install()
+{
+    createEventManagementConfigLogTable();
+    createCategoryVocabulary();
+}
+
+/**
+ * @return void
+ */
+function createEventManagementConfigLogTable(): void
+{
+    \Drupal::database()->schema()->createTable('event_management_config_log', [
+        'fields' => [
+            'id' => [
+                'type' => 'serial',
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+            ],
+            'user_id' => [
+                'type' => 'int',
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+                'default' => 0,
+            ],
+            'changed' => [
+                'type' => 'int',
+                'unsigned' => TRUE,
+                'not null' => TRUE,
+                'default' => 0,
+            ],
+            'config' => [
+                'type' => 'text',
+                'size' => 'big',
+                'not null' => TRUE,
+            ],
+        ],
+        'primary key' => ['id'],
+    ]);
+}
+
+/**
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ * @return void
+ */
+function createCategoryVocabulary(): void
+{
+    $vocabulary = Vocabulary::create([
+        'vid' => 'event_category',
+        'name' => 'Event Category',
+        'description' => 'Used to categories Events of our company',
+    ]);
+    $vocabulary->save();
+
+    Term::create([
+        'name' => 'Development',
+        'vid' => 'event_category',
+    ])->save();
+
+    Term::create([
+        'name' => 'DevOps',
+        'vid' => 'event_category',
+    ])->save();
+
+    Term::create([
+        'name' => 'QA',
+        'vid' => 'event_category',
+    ])->save();
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function event_management_uninstall(): void
+{
+    dropEventManagementConfigLogTable();
+    deleteCategoryVocabulary();
+}
+
+/**
+ * @throws \Drupal\Component\Plugin\Exception\InvalidPluginDefinitionException
+ * @throws \Drupal\Component\Plugin\Exception\PluginNotFoundException
+ * @throws \Drupal\Core\Entity\EntityStorageException
+ */
+function deleteCategoryVocabulary(): void
+{
+    $vocabulary = Vocabulary::load('event_category');
+
+    if ($vocabulary) {
+        // Load the terms for that vocabulary.
+        $terms = \Drupal::entityTypeManager()
+            ->getStorage('taxonomy_term')
+            ->loadTree('event_category');
+
+        // Delete all terms.
+        foreach ($terms as $term) {
+            $term_obj = \Drupal::entityTypeManager()
+                ->getStorage('taxonomy_term')
+                ->load($term->tid);
+            $term_obj->delete();
+        }
+
+        // Delete the vocabulary.
+        $vocabulary->delete();
+    }
+}
+
+/**
+ * @return void
+ */
+function dropEventManagementConfigLogTable(): void
+{
+    \Drupal::database()->schema()->dropTable('event_management_config_log');
+}
